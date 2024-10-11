@@ -37,8 +37,6 @@ function generate_unique_short_id(int $length = 8): string {
 
   <?=$form->field($model, 'link_type')->textInput()?>
 
-  <?=$form->field(new \app\models\Webhooks(), 'webhook_url')->textInput()?>
-
   <?=$form->field($model, 'click_count')->hiddenInput()->label(false)?>
 
   <div class="form-group">

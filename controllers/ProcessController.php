@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\Components;
 use app\models\ClickLogs;
 use app\models\ShortLinks;
 use yii\web\Controller;
@@ -25,7 +26,7 @@ class ProcessController extends Controller
   {
     $shortCode = ShortLinks::findOne(['short_code' => $key]);
 
-    if ($shortCode->id) {
+    if ($shortCode?->id) {
       if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $ip = $_SERVER['HTTP_CLIENT_IP'];
       } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -56,9 +57,11 @@ class ProcessController extends Controller
         \Yii::error($exception->getMessage());
         \Yii::error($exception->getTraceAsString());
       }
+
+      return $this->redirect($shortCode->original_url);
     }
 
-    return $this->redirect($shortCode->original_url);
+    return $this->redirect(Components::getParamRedirectUrl());
   }
 
   /**

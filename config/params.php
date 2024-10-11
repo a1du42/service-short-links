@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'base_url' => 'http://localhost:8080/',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'base_url' => 'https://tecj.ru/',
+    'redirect_url' => 'https://google.com/',
 ];

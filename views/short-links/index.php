@@ -30,13 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
     'filterModel'  => $searchModel,
     'columns'      => [
       ['class' => 'yii\grid\SerialColumn'],
-
       'id',
       'original_url',
       [
         'attribute' => 'short_code',
         'value'     => function ($model) {
-          return Components::getParam('base_url') . $model->short_code;
+          return Components::getParamBaseUrl() . $model->short_code;
         }
       ],
       'created_at',
@@ -46,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attribute' => 'click_count',
         'format'    => 'raw',
         'value'     => function ($model) {
-          $url = Components::getParam('base_url') . 'click-logs/?ClickLogsSearch[short_link_id]=' . $model->id;
+          $url = Components::getParamBaseUrl() . 'click-logs/?ClickLogsSearch[short_link_id]=' . $model->id;
           return Html::a($model->click_count, $url, ['target' => '_blank']);
         }
       ],
@@ -54,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attribute' => 'Webhooks',
         'format'    => 'raw', // Для вывода HTML
         'value'     => function ($model) {
-          $url = Components::getParam('base_url') . 'webhooks/?WebhooksSearch[short_link_id]=' . $model->id;
+          $url = Components::getParamBaseUrl() . 'webhooks/?WebhooksSearch[short_link_id]=' . $model->id;
           return Html::a((string)count(Webhooks::findAll(['short_link_id'=> $model->id])), $url, ['target' => '_blank']);
         }
       ],

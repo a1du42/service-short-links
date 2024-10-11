@@ -26,8 +26,6 @@ class ProcessController extends Controller
     $shortCode = ShortLinks::findOne(['short_code' => $key]);
 
     if ($shortCode->id) {
-      $ip = '';
-
       if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $ip = $_SERVER['HTTP_CLIENT_IP'];
       } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -39,8 +37,9 @@ class ProcessController extends Controller
 
       $clickLogs = new ClickLogs();
 
-      $clickLogs->clicked_at = time();
-      $clickLogs->user_ip    = $ip;
+      $clickLogs->short_link_id = $shortCode->id;
+      $clickLogs->clicked_at    = date('Y-m-d H:i:s');
+      $clickLogs->user_ip       = $ip;
 
       try {
         $clickLogs->save();
@@ -49,15 +48,17 @@ class ProcessController extends Controller
         \Yii::error($exception->getTraceAsString());
       }
 
+      $shortCode->click_count = $shortCode->click_count + 1;
 
-    } else {
-
+      try {
+        $shortCode->save();
+      } catch (\Exception $exception) {
+        \Yii::error($exception->getMessage());
+        \Yii::error($exception->getTraceAsString());
+      }
     }
-    var_dump();
-    var_dump($key);
 
-    exit;
-    return $this->redirect('https://example.com');
+    return $this->redirect($shortCode->original_url);
   }
 
   /**

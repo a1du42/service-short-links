@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
+    'base_url' => 'http://localhost:8080/',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
 ];

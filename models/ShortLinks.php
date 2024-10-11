@@ -16,6 +16,7 @@ use Yii;
  * @property int|null $click_count
  *
  * @property ClickLogs[] $clickLogs
+ * @property Webhooks[] $webhooks
  */
 class ShortLinks extends \yii\db\ActiveRecord
 {
@@ -66,5 +67,15 @@ class ShortLinks extends \yii\db\ActiveRecord
     public function getClickLogs()
     {
         return $this->hasMany(ClickLogs::class, ['short_link_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Webhooks]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWebhooks()
+    {
+        return $this->hasMany(Webhooks::class, ['short_link_id' => 'id']);
     }
 }

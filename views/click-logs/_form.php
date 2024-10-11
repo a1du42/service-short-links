@@ -10,18 +10,18 @@ use yii\widgets\ActiveForm;
 
 <div class="click-logs-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+  <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'short_link_id')->textInput() ?>
+  <?=$form->field($model, 'short_link_id')->textInput()?>
 
-    <?= $form->field($model, 'clicked_at')->textInput() ?>
+  <?=$form->field($model, 'clicked_at')->textInput()?>
 
-    <?= $form->field($model, 'user_ip')->textInput(['maxlength' => true]) ?>
+  <?=$form->field($model, 'user_ip')->textInput(['maxlength' => true])?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+  <div class="form-group">
+    <?=Html::submitButton('Save', ['class' => 'btn btn-success'])?>
+  </div>
 
-    <?php ActiveForm::end(); ?>
+  <?php ActiveForm::end(); ?>
 
 </div>

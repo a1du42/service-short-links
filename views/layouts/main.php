@@ -29,6 +29,24 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
 
+<header id="header">
+  <?php
+  NavBar::begin([
+    'brandLabel' => Yii::$app->name,
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+  ]);
+  echo Nav::widget([
+    'options' => ['class' => 'navbar-nav'],
+    'items' => [
+      ['label' => 'Links', 'url' => ['/short-links/index']],
+      ['label' => 'Clicks', 'url' => ['/click-logs/index']],
+      ['label' => 'Webhooks', 'url' => ['/webhooks/index']],
+    ]
+  ]);
+  NavBar::end();
+  ?>
+</header>
 
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">

@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use app\components\Components;
+use app\models\Webhooks;
 
 /** @var yii\web\View $this */
 /** @var app\models\ShortLinksSearch $searchModel */
@@ -43,13 +44,20 @@ $this->params['breadcrumbs'][] = $this->title;
       //'link_type',
       [
         'attribute' => 'click_count',
-        'format'    => 'raw', // Для вывода HTML
+        'format'    => 'raw',
         'value'     => function ($model) {
           $url = Components::getParam('base_url') . 'click-logs/?ClickLogsSearch[short_link_id]=' . $model->id;
-          return \yii\helpers\Html::a($model->click_count, $url, ['target' => '_blank']);
+          return Html::a($model->click_count, $url, ['target' => '_blank']);
         }
       ],
-      'webhook_link',
+      [
+        'attribute' => 'Webhooks',
+        'format'    => 'raw', // Для вывода HTML
+        'value'     => function ($model) {
+          $url = Components::getParam('base_url') . 'webhooks/?WebhooksSearch[short_link_id]=' . $model->id;
+          return Html::a((string)count(Webhooks::findAll(['short_link_id'=> $model->id])), $url, ['target' => '_blank']);
+        }
+      ],
       [
         'class'      => ActionColumn::className(),
         'urlCreator' => function ($action, ShortLinks $model, $key, $index, $column) {

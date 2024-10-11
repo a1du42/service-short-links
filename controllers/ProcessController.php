@@ -5,6 +5,10 @@ namespace app\controllers;
 use app\components\Components;
 use app\models\ClickLogs;
 use app\models\ShortLinks;
+use app\models\Webhooks;
+use GuzzleHttp\Exception\GuzzleException;
+use http\Client;
+use Yii;
 use yii\web\Controller;
 
 class ProcessController extends Controller
@@ -45,8 +49,8 @@ class ProcessController extends Controller
       try {
         $clickLogs->save();
       } catch (\Exception $exception) {
-        \Yii::error($exception->getMessage());
-        \Yii::error($exception->getTraceAsString());
+        Yii::error($exception->getMessage());
+        Yii::error($exception->getTraceAsString());
       }
 
       $shortCode->click_count = $shortCode->click_count + 1;
@@ -54,8 +58,23 @@ class ProcessController extends Controller
       try {
         $shortCode->save();
       } catch (\Exception $exception) {
-        \Yii::error($exception->getMessage());
-        \Yii::error($exception->getTraceAsString());
+        Yii::error($exception->getMessage());
+        Yii::error($exception->getTraceAsString());
+      }
+
+      $webhook = Webhooks::findOne(['short_link_id' => $shortCode->id]);
+
+      if ($webhook?->id) {
+        $client = new \GuzzleHttp\Client([
+          'verify' => false,
+        ]);
+        try {
+          $client->get($webhook->webhook_url);
+        } catch (\Exception|GuzzleException $exception) {
+          Yii::error($exception->getMessage());
+          Yii::error($exception->getTraceAsString());
+          var_dump($exception->getMessage());
+        }
       }
 
       return $this->redirect($shortCode->original_url);

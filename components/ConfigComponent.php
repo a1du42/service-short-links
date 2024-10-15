@@ -4,7 +4,7 @@ namespace app\components;
 
 use Yii;
 
-class Components
+class ConfigComponent
 {
   /**
    * @param $param
@@ -30,5 +30,9 @@ class Components
   public static function getParamRedirectUrl(): mixed
   {
     return Yii::$app->params['redirect_url'] ?? '';
+  }
+
+  public static function getComponent(string $component): array {
+    return Yii::$app->components;
   }
 }

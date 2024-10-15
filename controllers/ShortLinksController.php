@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\ControllerComponent;
 use app\models\ShortLinks;
 use app\models\ShortLinksSearch;
 use yii\web\Controller;
@@ -19,7 +20,7 @@ class ShortLinksController extends Controller
   public function behaviors()
   {
     return array_merge(
-      parent::behaviors(),
+      ControllerComponent::getBehaviorAuthenticator(),
       [
         'verbs' => [
           'class'   => VerbFilter::className(),

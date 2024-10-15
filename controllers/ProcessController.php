@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\components\Components;
+use app\components\ConfigComponent;
 use app\models\ClickLogs;
 use app\models\ShortLinks;
 use app\models\Webhooks;
@@ -80,7 +80,7 @@ class ProcessController extends Controller
       return $this->redirect($shortCode->original_url);
     }
 
-    return $this->redirect(Components::getParamRedirectUrl());
+    return $this->redirect(ConfigComponent::getParamRedirectUrl());
   }
 
   /**

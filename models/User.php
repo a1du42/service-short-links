@@ -2,103 +2,73 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use app\components\ConfigComponent;
+use yii\web\IdentityInterface;
+
+class User implements IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
+  public $id;
+  public $username;
+  public $password;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
+  /**
+   * Найти пользователя по ID.
+   */
+  public static function findIdentity($id)
+  {
+    return new static([
+      'username' => ConfigComponent::getParam('username'),
+      'password' => ConfigComponent::getParam('password')
+    ]);
+  }
 
+  /**
+   * Найти пользователя по токену (не используется для базовой аутентификации).
+   */
+  public static function findIdentityByAccessToken($token, $type = null)
+  {
+    return null;
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentity($id)
-    {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+  /**
+   * @param $username
+   * @return User
+   */
+  public static function findByUsername($username): User
+  {
+    return new static([
+      'username' => ConfigComponent::getParam('username'),
+      'password' => ConfigComponent::getParam('password')
+    ]);
+  }
+
+  /**
+   * Проверка пароля.
+   */
+  public function validatePassword($password): bool
+  {
+    return $this->password === $password;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function getAuthKey()
+  {
+    return null;
+  }
+
+  public function validateAuthKey($authKey)
+  {
+    return false;
+  }
+
+  public function __construct($config = [])
+  {
+    foreach ($config as $key => $value) {
+      $this->$key = $value;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
-    }
+  }
 }

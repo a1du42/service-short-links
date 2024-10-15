@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
-use app\components\Components;
+use app\components\ConfigComponent;
 use app\models\Webhooks;
 
 /** @var yii\web\View $this */
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
       [
         'attribute' => 'short_code',
         'value'     => function ($model) {
-          return Components::getParamBaseUrl() . $model->short_code;
+          return ConfigComponent::getParamBaseUrl() . $model->short_code;
         }
       ],
       'created_at',
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attribute' => 'click_count',
         'format'    => 'raw',
         'value'     => function ($model) {
-          $url = Components::getParamBaseUrl() . 'click-logs/?ClickLogsSearch[short_link_id]=' . $model->id;
+          $url = ConfigComponent::getParamBaseUrl() . 'click-logs/?ClickLogsSearch[short_link_id]=' . $model->id;
           return Html::a($model->click_count, $url, ['target' => '_blank']);
         }
       ],
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attribute' => 'Webhooks',
         'format'    => 'raw', // Для вывода HTML
         'value'     => function ($model) {
-          $url = Components::getParamBaseUrl() . 'webhooks/?WebhooksSearch[short_link_id]=' . $model->id;
+          $url = ConfigComponent::getParamBaseUrl() . 'webhooks/?WebhooksSearch[short_link_id]=' . $model->id;
           return Html::a((string)count(Webhooks::findAll(['short_link_id'=> $model->id])), $url, ['target' => '_blank']);
         }
       ],
